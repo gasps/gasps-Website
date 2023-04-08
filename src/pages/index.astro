@@ -1,0 +1,108 @@
+---
+import "/src/input.css";
+import Navbar from "../components/Navbar.astro";
+import Footer from "../components/Footer.astro";
+import Main from "../layouts/Main.astro";
+import Pricing from "../layouts/Pricing.astro";
+import Logo from "/favicon.svg?url";
+export interface Props {
+  title: string;
+}
+---
+
+<!DOCTYPE html>
+<html lang="en" class="hide-scroll-bar bg-black">
+  <!-- Global Metadata -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="generator" content={Astro.generator} />
+  <meta content="#2B2D31" name="theme-color" />
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href={Astro.url} />
+
+  <!-- Primary Meta Tags -->
+  <title>Sirius</title>
+  <meta name="title" content="Sirius" />
+  <meta name="description" content="Discover the most powerful script, with no boundaries and no compromises. With a range of features and a sleek interface, it's no surprise it's the leader in scripts." />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content="Sirius" />
+  <meta property="og:description" content="Discover the most powerful script, with no boundaries and no compromises. With a range of features and a sleek interface, it's no surprise it's the leader in scripts." />
+  <meta property="og:image" content="/assets/images/png/embedBanner.png" />
+  <meta property="og:site_name" content="Sirius" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={Astro.url} />
+  <meta property="twitter:title" content="Sirius" />
+  <meta property="twitter:description" content="Discover the most powerful script, with no boundaries and no compromises. With a range of features and a sleek interface, it's no surprise it's the leader in scripts." />
+  <meta property="twitter:image" content="/assets/images/png/embedBanner.png" />
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png?v=2" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicons/favicon-16x16.png?v=2" />
+  <link rel="manifest" href="/assets/images/favicons/site.webmanifest?v=2" />
+  <link rel="mask-icon" href="/assets/images/favicons/safari-pinned-tab.svg?v=2" color="#000000" />
+  <link rel="shortcut icon" href="/assets/images/favicons/favicon.ico?v=2" />
+  <meta name="msapplication-TileColor" content="#000000" />
+  <meta name="msapplication-config" content="/assets/images/favicons/browserconfig.xml?v=2" />
+
+  <body class="overflow-x-hidden">
+    <Navbar />
+    <Main />
+    <Pricing />
+    <Footer />
+
+    <script>
+      // Refresh page on width resize so that on mobile when the browser hide's it's bottom bar, the page will not refresh
+      let width = window.innerWidth;
+      window.addEventListener("resize", () => {
+        if (window.innerWidth !== width) {
+          window.location.reload();
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        let lazyVideos = [].slice.call(document.querySelectorAll("video.lazy"));
+
+        if ("IntersectionObserver" in window) {
+          let lazyVideoObserver = new IntersectionObserver(function (entries, observer) {
+            entries.forEach(function (video: any) {
+              if (video.isIntersecting) {
+                for (let source in video.target.children) {
+                  let videoSource = video.target.children[source] as HTMLSourceElement;
+                  if (typeof videoSource.tagName === "string" && videoSource.tagName === "SOURCE") {
+                    videoSource.src = videoSource.dataset.src;
+                  }
+                }
+
+                video.target.load();
+                video.target.classList.remove("lazy");
+                lazyVideoObserver.unobserve(video.target);
+              }
+            });
+          });
+
+          lazyVideos.forEach(function (lazyVideo) {
+            lazyVideoObserver.observe(lazyVideo);
+          });
+        }
+      });
+
+      const elements = document.querySelectorAll("[class*='text-[']") as NodeListOf<HTMLElement>;
+      elements.forEach((element) => {
+        const fontSize = element.className.match(/text-\[(.*?)\]/)[1];
+        if (parseInt(fontSize) <= 25.333333333333332) {
+          element.classList.add("font-sftext");
+        } else if (parseInt(fontSize) >= 26.666666666666664) {
+          element.classList.add("font-sfdisplay");
+        }
+      });
+    </script>
+    <script src="../gsap"></script>
+  </body>
+</html>
